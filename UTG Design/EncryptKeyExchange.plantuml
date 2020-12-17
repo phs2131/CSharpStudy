@@ -1,0 +1,17 @@
+@startuml
+(*) --> "난수발생 1"
+if "단방향암호 설정" then 
+    --> [MD5] "MD5 Hash 암호화"
+    --> "난수발생 2"
+else
+    --> [SHA256] "SHA256 Hash 암호화"
+    --> "난수발생 2"
+endif
+if "단방향암호 설정" then 
+    --> [MD5] "MD5 Hash 암호화"
+else
+    --> [SHA256] "SHA256 Hash 암호화"
+endif
+--> "난수발생 1 + 난수발생 2"
+
+@enduml
