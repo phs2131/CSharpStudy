@@ -13,5 +13,4 @@ else
     --> [SHA256] "SHA256 Hash 암호화"
 endif
 --> "난수발생 1 + 난수발생 2"
-
 @enduml
