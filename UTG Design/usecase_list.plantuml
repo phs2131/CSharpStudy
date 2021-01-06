@@ -17,6 +17,7 @@ package "단방향전송시스템" as UTG_System {
     usecase "데이터 암호화/복호화" as DataEncDec
     usecase "단방향 데이터 전송" as UniDataTransfer
 
+    usecase "서비스 관리"
     usecase "서비스 등록"
     usecase "서비스 수정"
     usecase "서비스 삭제"
@@ -29,34 +30,48 @@ package "단방향전송시스템" as UTG_System {
     usecase "서비스 재시작"
     usecase "서비스 설정 동기화"
     usecase "서비스 감사 이벤트"
+    usecase "서비스 정보 저장"
 
+    usecase "시스템 관리"
     usecase "시스템 모니터링"
     usecase "프로세스 시작"
     usecase "프로세스 중지"
     usecase "프로세스 재시작"
     usecase "프로세스 감사 이벤트"
-    usecase "시스템 상태 저장"
+    usecase "시스템 상태 정보 저장"
     usecase "시스템 상태 동기화"
     usecase "디스크 저장공간 제어"
 
+    usecase "통계 관리"
     usecase "통계 카운트"
     usecase "통계 조회"
+    usecase "통계 저장"
 
+    usecase "감사 관리"
     usecase "감사 이벤트 발생"
     usecase "감사 이벤트 조회"
+    usecase "감사 이벤트 저장"
 
+    usecase "알람 관리"
     usecase "알람 이벤트 발생"
     usecase "알람 이벤트 조회"
+    usecase "알람 이벤트 저장"
+    usecase "메일 경보 발송"
 
+    usecase "보안 관리"
     usecase "무결성 자체 시험"
+    usecase "시험 결과 저장"
 
+    usecase "사용자 관리"
     usecase "사용자 등록"
     usecase "사용자 수정"
     usecase "사용자 삭제"
+    usecase "사용자 정보 저장"
     usecase "로그인"
     usecase "사용자 권한"
+'
 
-    usecase "시스템 환경 설정"
+    usecase "시스템 환경 설정 저장"
 
 }
 
