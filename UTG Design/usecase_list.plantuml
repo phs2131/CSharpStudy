@@ -1,0 +1,63 @@
+@startuml
+left to right direction
+
+package "단방향전송시스템" as UTG_System {
+    usecase "TCP 연계 프록시 연동" as TCPProxy
+    usecase "UDP 연계 프록시 연동" as UDPProxy
+    usecase "SYSLOG 연계 프록시 연동" as SYSLOGProxy
+    usecase "SFTP 연계 프록시 연동" as SFTPProxy
+    usecase "FTP(s) 연계 프록시 연동" as FTPsProxy
+    usecase "OPC-DA 연계 프록시 연동" as OPCDAProxy
+    usecase "OPC-UA 연계 프록시 연동" as OPCUAProxy
+    usecase "DBMS 연계 프록시 연동" as DBMSProxy
+    usecase "프로토콜 식별 및 통제" as ProtoClassify
+    usecase "데이터 무결성 검증" as DataIntegrityChk
+    usecase "데이터 캡슐화/역캡슐화" as DataEncapDecap
+    usecase "데이터 변환" as OPCDataConvert
+    usecase "데이터 암호화/복호화" as DataEncDec
+    usecase "단방향 데이터 전송" as UniDataTransfer
+
+    usecase "서비스 등록"
+    usecase "서비스 수정"
+    usecase "서비스 삭제"
+    usecase "서비스 생성"
+    usecase "서비스 제거"
+    usecase "서비스 모니터링"
+    usecase "서비스 상태 저장"
+    usecase "서비스 시작"
+    usecase "서비스 중지"
+    usecase "서비스 재시작"
+    usecase "서비스 설정 동기화"
+    usecase "서비스 감사 이벤트"
+
+    usecase "시스템 모니터링"
+    usecase "프로세스 시작"
+    usecase "프로세스 중지"
+    usecase "프로세스 재시작"
+    usecase "프로세스 감사 이벤트"
+    usecase "시스템 상태 저장"
+    usecase "시스템 상태 동기화"
+    usecase "디스크 저장공간 제어"
+
+    usecase "통계 카운트"
+    usecase "통계 조회"
+
+    usecase "감사 이벤트 발생"
+    usecase "감사 이벤트 조회"
+
+    usecase "알람 이벤트 발생"
+    usecase "알람 이벤트 조회"
+
+    usecase "무결성 자체 시험"
+
+    usecase "사용자 등록"
+    usecase "사용자 수정"
+    usecase "사용자 삭제"
+    usecase "로그인"
+    usecase "사용자 권한"
+
+    usecase "시스템 환경 설정"
+
+}
+
+@enduml
