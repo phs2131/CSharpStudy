@@ -1,0 +1,86 @@
+@startuml
+left to right direction
+
+actor "연계 시스템" as Src << 안전영역 >>
+actor "연계 시스템" as Dst << 비안전영역 >>
+actor "사용자" as User
+actor "관리자" as Admin
+actor "운영자" as Operator
+
+Admin -down-> User
+Operator -down-> User
+
+rectangle "단방향 전송 시스템" {
+    together {
+        usecase "서비스 등록" as SVC_Add
+        usecase "서비스 수정" as SVC_Mod
+        usecase "서비스 삭제" as SVC_Del
+        usecase "서비스 상태 확인" as SVC_Status_Show
+    }
+
+    usecase "서비스 생성" as SVC_Create
+    usecase "서비스 제거" as SVC_Destroy
+    usecase "서비스 시작" as SVC_Start
+    usecase "서비스 중지" as SVC_Stop
+    usecase "서비스 재시작" as SVC_Restart
+    usecase "단방향 서비스" as UTG_SVC
+
+    usecase "감사 관리" as AUDITMgmt
+    usecase "시스템 관리" as SYSMgmt
+    
+    usecase "서비스 정보 입력" as SVC_Info
+    usecase "서비스 설정 저장" as SVC_Config_Insert
+    usecase "서비스 설정 수정" as SVC_Config_Update
+    usecase "서비스 설정 삭제" as SVC_Config_Delete
+    usecase "서비스 상태 저장" as SVC_Status_Update
+    usecase "서비스 설정 동기화" as SVC_Config_Sync
+    usecase "서비스 상태 동기화" as SVC_Status_Sync
+
+    usecase "관리 데이터 동기화" as Mgmt_Data_Sync
+
+}
+
+User -- SVC_Add
+User -- SVC_Mod
+User -- SVC_Del
+User -- SVC_Status_Show
+Src -- UTG_SVC
+UTG_SVC -- Dst
+
+SVC_Add <.down. SVC_Info : <<extend>>
+SVC_Add .down.> SVC_Config_Insert : <<include>>
+SVC_Add .down.> SVC_Create : <<include>>
+SVC_Add .down.> AUDITMgmt : <<include>>
+SVC_Mod .down.> SVC_Info : <<include>>
+SVC_Mod .down.> SVC_Config_Update : <<include>>
+SVC_Mod .down.> SVC_Restart : <<include>>
+SVC_Mod .down.> AUDITMgmt : <<include>>
+SVC_Del .down.> SVC_Destroy : <<include>>
+SVC_Del .down.> AUDITMgmt : <<include>>
+SVC_Del .down.> SVC_Config_Delete : <<include>>
+
+SVC_Create .down.> SVC_Start : <<include>>
+SVC_Create .down.> SVC_Config_Sync : <<include>>
+SVC_Restart .down.> SVC_Destroy : <<include>>
+SVC_Restart .down.> SVC_Create : <<include>>
+SVC_Destroy .down.> SVC_Stop : <<include>>
+SVC_Destroy .down.> SVC_Config_Sync : <<include>>
+
+SVC_Start .down.> SVC_Status_Update : <<include>>
+SVC_Stop .down.> SVC_Status_Update : <<include>>
+SVC_Restart .down.> SVC_Status_Update : <<include>>
+
+SVC_Status_Update .down.> SVC_Status_Sync : <<include>
+SVC_Config_Insert .down.> SVC_Config_Sync : <<include>>
+SVC_Config_Update .down.> SVC_Config_Sync : <<include>>
+SVC_Config_Delete .down.> SVC_Config_Sync : <<include>>
+
+SVC_Status_Sync .down.> Mgmt_Data_Sync : <<include>>
+SVC_Config_Sync .down.> Mgmt_Data_Sync : <<include>>
+
+SVC_Start .down.> SYSMgmt
+SVC_Stop .down.> SYSMgmt
+SVC_Restart .down.> SYSMgmt
+SYSMgmt --> UTG_SVC
+
+@enduml
