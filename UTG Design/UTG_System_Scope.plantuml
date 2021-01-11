@@ -1,0 +1,67 @@
+@startuml
+left to right direction
+
+actor "사용자" as User
+
+rectangle "단방향 전송 시스템" as UTGSYS {
+    usecase "서비스 관리" as SVCMgmt
+    usecase "시스템 관리" as SYSMgmt
+    usecase "사용자 관리" as USERMgmt
+    usecase "보안 관리" as SECMgmt
+    usecase "통계 관리" as STATMgmt
+    usecase "감사 관리" as AUDITMgmt
+
+    usecase "서비스 등록" as SVC_Add
+    usecase "서비스 수정" as SVC_Mod
+    usecase "서비스 삭제" as SVC_Del
+    usecase "서비스 조회" as SVC_Show
+
+    usecase "시스템 자원 상태 조회" as SYS_RSRC_Show
+    usecase "프로세스 제어" as SYS_PROC_Ctrl
+    usecase "시스템 자원 제어" as SYS_RSRC_Ctrl
+
+    usecase "사용자 등록" as USER_Add
+    usecase "사용자 수정" as USER_Mod
+    usecase "사용자 삭제" as USER_Del
+    usecase "사용자 조회" as USER_Show
+
+    usecase "통계 조회" as STAT_Show
+
+    usecase "감사 이벤트 조회" as AUDIT_Show
+
+    usecase "무결성 자체 시험 등록" as SEC_TEST_Add
+    usecase "무결성 자체 시험 결과 조회" as SEC_TEST_RESULT_Show
+}
+
+User --> SVCMgmt
+User --> SYSMgmt
+User --> USERMgmt
+User --> SECMgmt
+User --> STATMgmt
+User --> AUDITMgmt
+
+SVCMgmt <|-- SVC_Add
+SVCMgmt <|-- SVC_Mod
+SVCMgmt <|-- SVC_Del
+SVCMgmt <|-- SVC_Show
+
+SYSMgmt <|-- SYS_RSRC_Show
+SYSMgmt <|-- SYS_PROC_Ctrl
+SYSMgmt <|-- SYS_RSRC_Ctrl
+
+USERMgmt <|-- USER_Add
+USERMgmt <|-- USER_Mod
+USERMgmt <|-- USER_Del
+USERMgmt <|-- USER_Show
+
+STATMgmt <|-- STAT_Show
+
+AUDITMgmt <|-- AUDIT_Show
+
+SECMgmt <|-- SEC_TEST_Add
+SECMgmt <|-- SEC_TEST_RESULT_Show
+
+Src -- UTGSYS
+UTGSYS -down- Dst
+
+@enduml

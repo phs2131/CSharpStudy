@@ -1,0 +1,84 @@
+@startuml
+left to right direction
+
+actor "사용자" as User
+
+package "연계 서비스 (안전영역)" {
+actor "Source\nTCP 연계 시스템" as TCPSrc << actor >>
+actor "Source\nUDP 연계 시스템" as UDPSrc << actor >>
+actor "Source\nSFTP 연계 시스템" as SFTPSrc << actor >>
+actor "Source\nFTP(s) 연계 시스템" as FTPsSrc << actor >>
+actor "Source\nOPC-DA 연계 시스템" as OPCDASrc << actor >>
+actor "Source\nOPC-UA 연계 시스템" as OPCUASrc << actor >>
+actor "Source\nSYSLOG 연계 시스템" as SYSLOGSrc << actor >>
+actor "Source\nDBMS 연계 시스템" as DBMSSrc << actor >>
+}
+
+package "연계 서비스 (비안전영역)" {
+actor "Destination\nTCP 연계 시스템" as TCPDst << actor >>
+actor "Destination\nUDP 연계 시스템" as UDPDst << actor >>
+actor "Destination\nSFTP 연계 시스템" as SFTPDst << actor >>
+actor "Destination\nFTP(s) 연계 시스템" as FTPsDst << actor >>
+actor "Destination\nOPC-DA 연계 시스템" as OPCDADst << actor >>
+actor "Destination\nOPC-UA 연계 시스템" as OPCUADst << actor >>
+actor "Destination\nSYSLOG 연계 시스템" as SYSLOGDst << actor >>
+actor "Destination\nDBMS 연계 시스템" as DBMSDst << actor >>
+}
+
+package "데이터 처리 모듈" as DPE {
+    usecase "연계 프록시 연동" as Proxy
+    usecase "프로토콜 식별 및 통제" as ProtoClassify
+    usecase "데이터 무결성 검증" as DataIntegrityChk
+    usecase "데이터 캡슐화/역캡슐화" as DataEncapDecap
+
+    (Proxy) . (ProtoClassify)
+    (ProtoClassify) . (DataIntegrityChk)
+    (DataIntegrityChk) . (DataEncapDecap)
+}
+
+package "데이터 전송 모듈" as DTE {
+    usecase "데이터 암호화/복호화" as DataEncDec
+    usecase "단방향 데이터 전송" as UniDataTransfer
+
+    (DataEncDec) . (UniDataTransfer)
+}
+
+package "관리 도구" as CEM {
+    usecase "사용자 인터페이스" as GUI
+    usecase "서비스 관리" as SvcMgmt
+    usecase "시스템 관리" as SysMgmt
+    usecase "보안 관리" as SecMgmt
+    usecase "통계 관리" as StatMgmt
+    usecase "감사 관리" as AuditMgmt
+    usecase "사용자 관리" as UserMgmt
+
+    (GUI) . (SvcMgmt)
+    (GUI) . (SysMgmt)
+    (GUI) . (SecMgmt)
+    (GUI) . (StatMgmt)
+    (GUI) . (AuditMgmt)
+    (GUI) . (UserMgmt)
+}
+    User -down- CEM
+    TCPSrc -- (Proxy)
+    (Proxy) -- TCPDst
+    UDPSrc -- (Proxy)
+    (Proxy) -- UDPDst
+    SFTPSrc -- (Proxy)
+    (Proxy) -- SFTPDst
+    FTPsSrc -- (Proxy)
+    (Proxy) -- FTPsDst
+    OPCDASrc -- (Proxy)
+    (Proxy) -- OPCDADst
+    OPCUASrc -- (Proxy)
+    (Proxy) -- OPCUADst
+    SYSLOGSrc -- (Proxy)
+    (Proxy) -- SYSLOGDst
+    DBMSSrc -- (Proxy)
+    (Proxy) -- DBMSDst
+
+DPE -- DTE
+CEM -- DPE
+CEM -- DTE
+
+@enduml

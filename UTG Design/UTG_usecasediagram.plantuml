@@ -1,0 +1,111 @@
+@startuml
+left to right direction
+
+actor "연계 시스템" as Src << 안전영역 >>
+actor "연계 시스템" as Dst << 비안전영역 >>
+actor "사용자" as User
+actor "관리자" as Admin
+actor "운영자" as Operator
+
+Admin -down-> User
+Operator -down-> User
+
+rectangle "단방향 전송 시스템" {
+    together {
+        usecase "서비스 등록" as SVC_Add
+        usecase "서비스 수정" as SVC_Mod
+        usecase "서비스 삭제" as SVC_Del
+        usecase "서비스 상태 확인" as SVC_Status_Show
+        usecase "시스템 자원 상태 확인" as SYS_Status_Show
+        usecase "통계 조회" as Stat_Show
+        usecase "감사 이벤트 조회" as Audit_Show
+    }
+
+    usecase "서비스 생성" as SVC_Create
+    usecase "서비스 제거" as SVC_Destroy
+    usecase "서비스 시작" as SVC_Start
+    usecase "서비스 중지" as SVC_Stop
+    usecase "서비스 재시작" as SVC_Restart
+    usecase "단방향 서비스" as UTG_SVC
+
+    usecase "감사 이벤트 생성" as Audit_Create
+    usecase "통계 데이터 생성" as Stat_Create
+
+    usecase "서비스 정보 입력" as SVC_Info
+    usecase "서비스 설정 저장" as SVC_Config_Insert
+    usecase "서비스 설정 수정" as SVC_Config_Update
+    usecase "서비스 설정 삭제" as SVC_Config_Delete
+    usecase "서비스 상태 저장" as SVC_Status_Update
+    usecase "서비스 설정 동기화" as SVC_Config_Sync
+    usecase "서비스 상태 동기화" as SVC_Status_Sync
+
+    usecase "시스템 자원 상태 모니터링" as SYS_Resource_Check
+    usecase "CPU 자원 상태" as SYS_CPU_Status
+    usecase "Memory 자원 상태" as SYS_MEM_Status
+    usecase "Disk 자원 상태" as SYS_DISK_Status
+    usecase "프로세스 시작" as SYS_PROC_Start
+    usecase "프로세스 중지" as SYS_PROC_Stop
+    usecase "프로세스 재시작" as SYS_PROC_Restart
+
+    usecase "관리 데이터 동기화" as Mgmt_Data_Sync
+
+}
+
+User -- SVC_Add
+User -- SVC_Mod
+User -- SVC_Del
+User -- SVC_Status_Show
+User -- SYS_Status_Show
+User -- Stat_Show
+User -- Audit_Show
+Src -- UTG_SVC
+UTG_SVC -- Dst
+UTG_SVC -- Audit_Create
+UTG_SVC -- Stat_Create
+
+SVC_Add <.down. SVC_Info : <<extend>>
+SVC_Add .down.> SVC_Config_Insert : <<include>>
+SVC_Add .down.> SVC_Create : <<include>>
+SVC_Add .down.> Audit_Create : <<include>>
+SVC_Mod .down.> SVC_Info : <<include>>
+SVC_Mod .down.> SVC_Config_Update : <<include>>
+SVC_Mod .down.> SVC_Restart : <<include>>
+SVC_Mod .down.> Audit_Create : <<include>>
+SVC_Del .down.> SVC_Destroy : <<include>>
+SVC_Del .down.> Audit_Create : <<include>>
+SVC_Del .down.> SVC_Config_Delete : <<include>>
+
+SVC_Create .down.> SVC_Start : <<include>>
+SVC_Create .down.> SVC_Config_Sync : <<include>>
+SVC_Restart .down.> SVC_Destroy : <<include>>
+SVC_Restart .down.> SVC_Create : <<include>>
+SVC_Destroy .down.> SVC_Stop : <<include>>
+SVC_Destroy .down.> SVC_Config_Sync : <<include>>
+
+SVC_Start .down.> SVC_Status_Update : <<include>>
+SVC_Stop .down.> SVC_Status_Update : <<include>>
+SVC_Restart .down.> SVC_Status_Update : <<include>>
+
+SVC_Status_Update .down.> SVC_Status_Sync : <<include>
+SVC_Config_Insert .down.> SVC_Config_Sync : <<include>>
+SVC_Config_Update .down.> SVC_Config_Sync : <<include>>
+SVC_Config_Delete .down.> SVC_Config_Sync : <<include>>
+
+SVC_Status_Sync .down.> Mgmt_Data_Sync : <<include>>
+SVC_Config_Sync .down.> Mgmt_Data_Sync : <<include>>
+
+SYS_Resource_Check .down.> SYS_CPU_Status : <<include>>
+SYS_Resource_Check .down.> SYS_MEM_Status : <<include>>
+SYS_Resource_Check .down.> SYS_DISK_Status : <<include>>
+SYS_Resource_Check .down.> Audit_Create : <<include>>
+SVC_Start .down.> SYS_PROC_Start : <<include>>
+SYS_PROC_Start --> UTG_SVC
+SYS_PROC_Start .down.> Audit_Create : <<include>>
+SVC_Stop .down.> SYS_PROC_Stop : <<include>>
+SYS_PROC_Stop --> UTG_SVC
+SYS_PROC_Stop .down.> Audit_Create : <<include>>
+SVC_Restart .down.> SYS_PROC_Restart : <<include>>
+SYS_PROC_Restart --> UTG_SVC
+SYS_PROC_Restart .down.> Audit_Create : <<include>>
+
+@enduml

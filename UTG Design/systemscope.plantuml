@@ -1,65 +1,45 @@
 @startuml
 left to right direction
+skinparam packageStyle rectangle
 
 actor "사용자" as User
-actor "Source\nTCP 연계 시스템" as TCPSrc << actor >>
-actor "Source\nUDP 연계 시스템" as UDPSrc << actor >>
-actor "Source\nSFTP 연계 시스템" as SFTPSrc << actor >>
-actor "Source\nFTP(s) 연계 시스템" as FTPsSrc << actor >>
-actor "Source\nOPC-DA 연계 시스템" as OPCDASrc << actor >>
-actor "Source\nOPC-UA 연계 시스템" as OPCUASrc << actor >>
-actor "Source\nSYSLOG 연계 시스템" as SYSLOGSrc << actor >>
-actor "Source\nDBMS 연계 시스템" as DBMSSrc << actor >>
+actor "Source\n연계 시스템" as Src << actor >>
+actor "Destination\n연계 시스템" as Dst << actor >>
 
-actor "Destination\nTCP 연계 시스템" as TCPDst << actor >>
-actor "Destination\nUDP 연계 시스템" as UDPDst << actor >>
-actor "Destination\nSFTP 연계 시스템" as SFTPDst << actor >>
-actor "Destination\nFTP(s) 연계 시스템" as FTPsDst << actor >>
-actor "Destination\nOPC-DA 연계 시스템" as OPCDADst << actor >>
-actor "Destination\nOPC-UA 연계 시스템" as OPCUADst << actor >>
-actor "Destination\nSYSLOG 연계 시스템" as SYSLOGDst << actor >>
-actor "Destination\nDBMS 연계 시스템" as DBMSDst << actor >>
-
-package "단방향전송시스템" as UTG_System {
+rectangle "단방향 전송 시스템" as UTG_SYS {
+rectangle "단방향 전송 서비스" as UTG_SVC {
     usecase "연계 프록시 연동" as Proxy
     usecase "프로토콜 식별 및 통제" as ProtoClassify
     usecase "데이터 무결성 검증" as DataIntegrityChk
     usecase "데이터 암호화/복호화" as DataEncDec
     usecase "데이터 캡슐화/역캡슐화" as DataEncapDecap
     usecase "단방향 데이터 전송" as UniDataTransfer
-    usecase "코어 관리 모듈"
-    usecase "사용자 인터페이스"
-    
-    User -down- UTG_System
-    TCPSrc -- (Proxy)
-    (Proxy) -- TCPDst
 
-    UDPSrc -- (Proxy)
-    (Proxy) -- UDPDst
-
-    SFTPSrc -- (Proxy)
-    (Proxy) -- SFTPDst
-
-    FTPsSrc -- (Proxy)
-    (Proxy) -- FTPsDst
-
-    OPCDASrc -- (Proxy)
-    (Proxy) -- OPCDADst
-
-    OPCUASrc -- (Proxy)
-    (Proxy) -- OPCUADst
-
-    SYSLOGSrc -- (Proxy)
-    (Proxy) -- SYSLOGDst
-
-    DBMSSrc -- (Proxy)
-    (Proxy) -- DBMSDst
-
-    (Proxy) .> (ProtoClassify)
-    (ProtoClassify) .> (DataIntegrityChk)
-    (DataIntegrityChk) .> (DataEncapDecap)
-    (DataEncapDecap) .> (DataEncDec)
-    (DataEncDec) .> (UniDataTransfer)
+    (Proxy) .> (ProtoClassify) : <<include>>
+    (ProtoClassify) .> (DataIntegrityChk) : <<include>>
+    (DataIntegrityChk) .> (DataEncapDecap) : <<include>>
+    (DataEncapDecap) .> (DataEncDec) : <<include>>
+    (DataEncDec) .> (UniDataTransfer) : <<include>>
 }
 
+rectangle "공통 코어 서비스" as CORE_SVC {
+    usecase "서비스 관리" as svcmgmt
+    usecase "시스템 관리" as sysmgmt
+    usecase "보안 관리" as secmgmt
+    usecase "감사 관리" as auditmgmt
+    usecase "통계 관리" as statmgmt
+    usecase "사용자 관리" as usermgmt
+    usecase "알람 관리" as alarmmgmt
+    usecase "시스템 환경 설정 관리" as sysenvmgmt
+
+    (svcmgmt) .> (sysmgmt) : <<include>>
+    (auditmgmt) <. (alarmmgmt) : <<extend>>
+}
+
+}
+
+User -- UTG_SYS
+Src -- UTG_SYS
+UTG_SYS -- Dst
+UTG_SVC -- CORE_SVC
 @enduml
